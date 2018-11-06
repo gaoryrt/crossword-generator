@@ -43,7 +43,9 @@
   },
   "dependencies": {
     "core-js": "^2.5.7",
-    "gelerator": "^1.1.54"
+    "gelerator": "^1.1.54",
+    "lodash": "^4.17.11",
+    "number-flip": "^1.0.28"
   },
   "browserslist": [
     "iOS >= 8",

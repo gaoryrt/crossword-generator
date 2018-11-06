@@ -2917,7 +2917,7 @@ lodash.uniq@^4.5.0:
   version "4.5.0"
   resolved "http://registry.npm.taobao.org/lodash.uniq/download/lodash.uniq-4.5.0.tgz#d0225373aeb652adc1bc82e4945339a842754773"
 
-lodash@^4.17.10, lodash@^4.17.3, lodash@^4.17.5:
+lodash@^4.17.10, lodash@^4.17.11, lodash@^4.17.3, lodash@^4.17.5:
   version "4.17.11"
   resolved "http://registry.npm.taobao.org/lodash/download/lodash-4.17.11.tgz#b39ea6229ef607ecd89e2c8df12536891cac9b8d"
 
@@ -3295,6 +3295,12 @@ nth-check@^1.0.1, nth-check@~1.0.1:
 num2fraction@^1.2.2:
   version "1.2.2"
   resolved "http://registry.npm.taobao.org/num2fraction/download/num2fraction-1.2.2.tgz#6f682b6a027a4e9ddfa4564cd2589d1d4e669ede"
+
+number-flip@^1.0.28:
+  version "1.0.28"
+  resolved "http://registry.npm.taobao.org/number-flip/download/number-flip-1.0.28.tgz#91bebe18088bce0c6d3d2e649bd65dea0abec43a"
+  dependencies:
+    gelerator "^1.1.54"
 
 number-is-nan@^1.0.0:
   version "1.0.1"

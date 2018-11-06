@@ -1,4 +1,5 @@
 import {g} from 'gelerator'
+import {cloneDeep} from 'lodash'
 import './views/Main.css'
 
 const rawWordArr = [
@@ -14,33 +15,37 @@ const rawWordArr = [
   'wand',
 ]
 
-function sortArr(arr) { return arr.sort((i, j) => i.length - j.length) }
+function sortArr(arr) { return arr.sort((i, j) => i.length - j.length)}
 
 const sortedArr = sortArr(rawWordArr)
 
 const allWordsObj = {}
 
+const shuffle = a => {
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1))
+    const tmp = a[i]
+    a[i] = a[j]
+    a[j] = tmp
+  }
+  return a
+}
+
 function putIn({wordsObj, wordStr, xNum, yNum, isHorizon}) {
-  const len = wordStr.length
-  for (let i = 0; i < len; i += 1) {
+  const rtn = cloneDeep(wordsObj)
+  for (let i = 0, len = wordStr.length; i < len; i += 1) {
     const letter = wordStr[i]
-    if (!wordsObj[letter]) wordsObj[letter] = []
-    wordsObj[letter].push({
+    if (!rtn[letter]) rtn[letter] = []
+    rtn[letter].push({
       x: xNum + (isHorizon ? i : 0),
       y: yNum + (isHorizon ? 0 : i)
     })
   }
+  return rtn
 }
 
-putIn({
-  wordsObj: allWordsObj,
-  wordStr: rawWordArr.pop(),
-  xNum: 0,
-  yNum: 0,
-  isHorizon: true
-})
-
 function findPosition({matrixObj, wordsObj, wordStr}) {
+  if (!wordStr) return []
   const available = []
   const len = wordStr.length
   for (let i = 0; i < len; i += 1) {
@@ -96,43 +101,63 @@ function wordsObjToMatrix(wordsObj) {
   return matrix
 }
 
-for (let i = 0; i < 9; i += 1) {
-  const nextObjArr = findPosition({
-    wordsObj: allWordsObj,
-    wordStr: sortedArr.pop(),
-    matrixObj: wordsObjToMatrix(allWordsObj)
+function output(wordsObj) {
+  let c = 0
+  const matrixObj = wordsObjToMatrix(wordsObj)
+  Object.keys(matrixObj).forEach(y => {
+    Object.keys(matrixObj[y]).forEach(x => {
+      document.body.appendChild(g({
+        style: `transform:translate(${x}em,${y}em)`,
+        class: 'letter'
+      })(matrixObj[y][x]))
+      c += 1
+    })
   })
-
-  if (!nextObjArr.length) location.reload()
-
-  const idx = Math.floor(nextObjArr.length * Math.random())
-  const nextObj = nextObjArr[idx]
-  
-  putIn({
-    wordsObj: allWordsObj,
-    wordStr: nextObj.wordStr,
-    xNum: nextObj.xNum,
-    yNum: nextObj.yNum,
-    isHorizon: nextObj.isHorizon
-  })
+  console.log(c)
 }
 
-const matrixObj = wordsObjToMatrix(allWordsObj)
-Object.keys(matrixObj).forEach(y => {
-  Object.keys(matrixObj[y]).forEach(x => {
-    document.body.appendChild(g({
-      style: `transform:translate(${x}em,${y}em)`,
-      class: 'letter'
-    })(matrixObj[y][x]))
-  })
-})
+const ansArr = []
 
-// wordsObjToMatrix(allWordsObj).forEach(line => {
-//   let l = ''
-//   for (let i = -50; i < 50; i += 1) {
-//     l += line[i] ? line[i] : ' '
-//     l += ' '
-//   }
-//   console.log(l)
-// })
+const draw = (lastWordsObj, putInObj) => {
+  ansArr.push(putInObj)
+  const tempWordsObj = putIn({
+    wordsObj: lastWordsObj,
+    wordStr: putInObj.wordStr,
+    xNum: putInObj.xNum,
+    yNum: putInObj.yNum,
+    isHorizon: putInObj.isHorizon
+  })
+
+  const nextWord = sortedArr.pop()
+
+  const nextObjArr = findPosition({
+    wordsObj: tempWordsObj,
+    wordStr: nextWord,
+    matrixObj: wordsObjToMatrix(tempWordsObj)
+  })
+
+  if (!nextWord) output(tempWordsObj)
+  else if (nextObjArr.length) {
+    const arr = shuffle(nextObjArr)
+    for (let i = 0; i < nextObjArr.length; i += 1) {
+      const nextObj = arr[i]
+      const ans = draw(tempWordsObj, nextObj)
+      if (!ans) return ans
+      else {
+        console.log(ansArr)
+        return output(tempWordsObj)
+      }
+    }
+  } else {
+    return 1
+  }
+}
+
+// 开始
+draw(allWordsObj, {
+  wordStr: rawWordArr.pop(),
+  xNum: 0,
+  yNum: 0,
+  isHorizon: true
+})
 
