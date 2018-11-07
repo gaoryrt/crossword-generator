@@ -1,25 +1,24 @@
-import {g} from 'gelerator'
-import {cloneDeep} from 'lodash'
+import { g } from 'gelerator'
 import './views/Main.css'
 
 const rawWordArr = [
-  'booth',
-  'distracted',
   'redemption',
-  'plain',
-  'collapse',
-  'borough',
+  'distracted',
   'promotion',
   'meatball',
+  'collapse',
   'vintage',
-  'wand',
+  'borough',
+  'plain',
+  'booth',
+  'wand'
 ]
 
-function sortArr(arr) { return arr.sort((i, j) => i.length - j.length)}
+function sortArr(arr) {
+  return arr.sort((i, j) => i.length - j.length)
+}
 
 const sortedArr = sortArr(rawWordArr)
-
-const allWordsObj = {}
 
 const shuffle = a => {
   for (let i = a.length - 1; i > 0; i--) {
@@ -31,20 +30,35 @@ const shuffle = a => {
   return a
 }
 
-function putIn({wordsObj, wordStr, xNum, yNum, isHorizon}) {
-  const rtn = cloneDeep(wordsObj)
-  for (let i = 0, len = wordStr.length; i < len; i += 1) {
-    const letter = wordStr[i]
-    if (!rtn[letter]) rtn[letter] = []
-    rtn[letter].push({
-      x: xNum + (isHorizon ? i : 0),
-      y: yNum + (isHorizon ? 0 : i)
-    })
-  }
+// function putIn({wordsObj, wordStr, xNum, yNum, isHorizon}) {
+//   const rtn = cloneDeep(wordsObj)
+//   for (let i = 0, len = wordStr.length; i < len; i += 1) {
+//     const letter = wordStr[i]
+//     if (!rtn[letter]) rtn[letter] = []
+//     rtn[letter].push({
+//       x: xNum + (isHorizon ? i : 0),
+//       y: yNum + (isHorizon ? 0 : i)
+//     })
+//   }
+//   return rtn
+// }
+
+function letterMapOfPositionObjArr(positionObjArr) {
+  const rtn = {}
+  positionObjArr.forEach(positionObj => {
+    for (let i = 0, len = positionObj.wordStr.length; i < len; i += 1) {
+      const letter = positionObj.wordStr[i]
+      if (!rtn[letter]) rtn[letter] = []
+      rtn[letter].push({
+        x: positionObj.xNum + (positionObj.isHorizon ? i : 0),
+        y: positionObj.yNum + (positionObj.isHorizon ? 0 : i)
+      })
+    }
+  })
   return rtn
 }
 
-function findPosition({matrixObj, wordsObj, wordStr}) {
+function findPosition({ matrixObj, wordsObj, wordStr }) {
   if (!wordStr) return []
   const available = []
   const len = wordStr.length
@@ -55,7 +69,7 @@ function findPosition({matrixObj, wordsObj, wordStr}) {
       const xNum = xyObj.x
       const yNum = xyObj.y
       const isHorizon = matrixObj[yNum][xNum + 1] === undefined
-      
+
       if (isHorizon) {
         // 横的话，左一不该有东西
         if (matrixObj[yNum][xNum - i - 1] !== undefined) return
@@ -76,7 +90,7 @@ function findPosition({matrixObj, wordsObj, wordStr}) {
           if (matrixObj[yNum - i + j][xNum + 1] !== undefined) return
         }
       }
-      
+
       available.push({
         wordStr,
         xNum: xyObj.x - (isHorizon ? i : 0),
@@ -101,63 +115,52 @@ function wordsObjToMatrix(wordsObj) {
   return matrix
 }
 
-function output(wordsObj) {
+function putOnScreen(wordsObj) {
   let c = 0
   const matrixObj = wordsObjToMatrix(wordsObj)
   Object.keys(matrixObj).forEach(y => {
     Object.keys(matrixObj[y]).forEach(x => {
-      document.body.appendChild(g({
-        style: `transform:translate(${x}em,${y}em)`,
-        class: 'letter'
-      })(matrixObj[y][x]))
+      document.body.appendChild(
+        g({
+          style: `transform:translate(${x}em,${y}em)`,
+          class: 'letter'
+        })(matrixObj[y][x])
+      )
       c += 1
     })
   })
   console.log(c)
+  return c
 }
 
-const ansArr = []
-
-const draw = (lastWordsObj, putInObj) => {
-  ansArr.push(putInObj)
-  const tempWordsObj = putIn({
-    wordsObj: lastWordsObj,
-    wordStr: putInObj.wordStr,
-    xNum: putInObj.xNum,
-    yNum: putInObj.yNum,
-    isHorizon: putInObj.isHorizon
-  })
-
-  const nextWord = sortedArr.pop()
-
+const draw = (positionObjArr, wordStr) => {
+  const letterMap = letterMapOfPositionObjArr(positionObjArr)
+  if (!wordStr) return putOnScreen(letterMap)
   const nextObjArr = findPosition({
-    wordsObj: tempWordsObj,
-    wordStr: nextWord,
-    matrixObj: wordsObjToMatrix(tempWordsObj)
+    wordStr,
+    wordsObj: letterMap,
+    matrixObj: wordsObjToMatrix(letterMap)
   })
-
-  if (!nextWord) output(tempWordsObj)
-  else if (nextObjArr.length) {
+  if (nextObjArr.length) {
     const arr = shuffle(nextObjArr)
+    const theWordStr = sortedArr.pop()
     for (let i = 0; i < nextObjArr.length; i += 1) {
       const nextObj = arr[i]
-      const ans = draw(tempWordsObj, nextObj)
-      if (!ans) return ans
-      else {
-        console.log(ansArr)
-        return output(tempWordsObj)
+      const ans = draw(positionObjArr.concat(nextObj), theWordStr)
+      if (ans) {
+        positionObjArr.push(nextObj)
+        sortedArr.push(theWordStr)
+        return ans
+      } else {
+        console.log('尝试往已有状态', positionObjArr, '中放入单词', theWordStr, '时失败')
+        const lastPositionObjArr = positionObjArr.slice(0, -1)
+        const lastWordStr = positionObjArr[positionObjArr.length - 1].wordStr
+        sortedArr.push(wordStr)
+        sortedArr.push(theWordStr)
+        return draw(lastPositionObjArr, lastWordStr)
       }
     }
-  } else {
-    return 1
-  }
+  } else return false
 }
 
-// 开始
-draw(allWordsObj, {
-  wordStr: rawWordArr.pop(),
-  xNum: 0,
-  yNum: 0,
-  isHorizon: true
-})
-
+draw([{ wordStr: sortedArr.pop(), xNum: 0, yNum: 0, isHorizon: true }], sortedArr.pop())
