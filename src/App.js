@@ -14,13 +14,13 @@ const rawWordArr = [
   'wand'
 ]
 
+const sortedArr = sortArr(rawWordArr)
+
 function sortArr(arr) {
   return arr.sort((i, j) => i.length - j.length)
 }
 
-const sortedArr = sortArr(rawWordArr)
-
-const shuffle = a => {
+function shuffle(a) {
   for (let i = a.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1))
     const tmp = a[i]
@@ -29,19 +29,6 @@ const shuffle = a => {
   }
   return a
 }
-
-// function putIn({wordsObj, wordStr, xNum, yNum, isHorizon}) {
-//   const rtn = cloneDeep(wordsObj)
-//   for (let i = 0, len = wordStr.length; i < len; i += 1) {
-//     const letter = wordStr[i]
-//     if (!rtn[letter]) rtn[letter] = []
-//     rtn[letter].push({
-//       x: xNum + (isHorizon ? i : 0),
-//       y: yNum + (isHorizon ? 0 : i)
-//     })
-//   }
-//   return rtn
-// }
 
 function letterMapOfPositionObjArr(positionObjArr) {
   const rtn = {}
@@ -133,7 +120,7 @@ function putOnScreen(wordsObj) {
   return c
 }
 
-const draw = (positionObjArr, wordStr) => {
+function draw(positionObjArr, wordStr) {
   const letterMap = letterMapOfPositionObjArr(positionObjArr)
   if (!wordStr) return putOnScreen(letterMap)
   const nextObjArr = findPosition({
@@ -151,15 +138,10 @@ const draw = (positionObjArr, wordStr) => {
         positionObjArr.push(nextObj)
         sortedArr.push(theWordStr)
         return ans
-      } else {
-        console.log('尝试往已有状态', positionObjArr, '中放入单词', theWordStr, '时失败')
-        const lastPositionObjArr = positionObjArr.slice(0, -1)
-        const lastWordStr = positionObjArr[positionObjArr.length - 1].wordStr
-        sortedArr.push(wordStr)
-        sortedArr.push(theWordStr)
-        return draw(lastPositionObjArr, lastWordStr)
       }
     }
+    sortedArr.push(theWordStr)
+    return false
   } else return false
 }
 
