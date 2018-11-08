@@ -7,6 +7,7 @@
   "description": "crossword generator",
   "author": "gaoryrt",
   "license": "MIT",
+  "keywords": ["crossword", "cross word"],
   "scripts": {
     "build": "npx webpack --config ./public/webpack.prod.js",
     "dev": "node ./public/server.js"

@@ -174,11 +174,15 @@ export default arr => {
       const startY = positionObj.yNum
       const startX = positionObj.xNum
       letterArr.forEach((letter, letterIdx) => {
-        ownerMap[startY + (isHorizon ? 0 : letterIdx)][startX + (isHorizon ? letterIdx : 0)] = {
-          letter,
-          orderIdx,
-          isHorizon,
-          letterIdx
+        const x = startX + (isHorizon ? letterIdx : 0)
+        const y = startY + (isHorizon ? 0 : letterIdx)
+        const obj = {letter}
+        const key = isHorizon ? 'horizontal' : 'vertical'
+        if (ownerMap[y][x]) {
+          ownerMap[y][x][key] = orderIdx
+        } else {
+          obj[key] = orderIdx
+          ownerMap[y][x] = obj
         }
       })
     })

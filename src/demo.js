@@ -3,12 +3,12 @@ import CWG from './App'
 import { g } from 'gelerator'
 
 const words = [
-  'shout-out',
-  'enormous',
-  'mail',
-  'domestic',
-  'postbox',
-  'spicy'
+  'do',
+  'not',
+  // 'mail',
+  // 'domestic',
+  // 'postbox',
+  // 'spicy'
 ]
 
 const result = CWG(words)
