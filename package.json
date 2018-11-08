@@ -1,13 +1,16 @@
 {
   "name": "cwg",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "sideEffects": [
     "*.css"
   ],
   "description": "crossword generator",
   "author": "gaoryrt",
   "license": "MIT",
-  "keywords": ["crossword", "cross word"],
+  "keywords": [
+    "crossword",
+    "cross word"
+  ],
   "scripts": {
     "build": "npx webpack --config ./public/webpack.prod.js",
     "dev": "node ./public/server.js"
