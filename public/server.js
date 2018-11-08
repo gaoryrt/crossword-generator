@@ -22,7 +22,7 @@ config.entry.push('webpack-hot-middleware/client?reload=true')
       ]
     }
   }))
-  
+
   const compiler = webpack(config)
 
   app.use(

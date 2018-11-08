@@ -39,13 +39,11 @@
     "webpack-cli": "^3.1.0",
     "webpack-dev-middleware": "^3.3.0",
     "webpack-hot-middleware": "^2.24.0",
+    "gelerator": "^1.1.54",
     "webpack-merge": "^4.1.4"
   },
   "dependencies": {
-    "core-js": "^2.5.7",
-    "gelerator": "^1.1.54",
-    "lodash": "^4.17.11",
-    "number-flip": "^1.0.28"
+
   },
   "browserslist": [
     "iOS >= 8",

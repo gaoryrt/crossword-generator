@@ -6,10 +6,10 @@ const FriendlyErrors = require('friendly-errors-webpack-plugin')
 
 
 module.exports = merge(base, {
+  entry: ['./src/App.js'],
   output: {
     libraryTarget: 'commonjs2',
-    filename: 'js/[name].[contenthash:8].js',
-    publicPath: '//live-media-g.bczcdn.com/'
+    filename: 'crossword-generator.min.js'
   },
   mode: 'production',
   stats: {
