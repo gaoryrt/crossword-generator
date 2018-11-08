@@ -1,13 +1,12 @@
 {
-  "name": "CWG",
-  "version": "0.0.1",
+  "name": "cwg",
+  "version": "0.1.0",
   "sideEffects": [
     "*.css"
   ],
-  "description": "cross word generator",
+  "description": "crossword generator",
   "author": "gaoryrt",
   "license": "MIT",
-  "private": true,
   "scripts": {
     "build": "npx webpack --config ./public/webpack.prod.js",
     "dev": "node ./public/server.js"
@@ -27,6 +26,7 @@
     "express": "^4.16.3",
     "file-loader": "^2.0.0",
     "friendly-errors-webpack-plugin": "^1.7.0",
+    "gelerator": "^1.1.54",
     "get-port": "^4.0.0",
     "html-webpack-plugin": "^3.2.0",
     "mini-css-extract-plugin": "^0.4.2",
@@ -39,12 +39,9 @@
     "webpack-cli": "^3.1.0",
     "webpack-dev-middleware": "^3.3.0",
     "webpack-hot-middleware": "^2.24.0",
-    "gelerator": "^1.1.54",
     "webpack-merge": "^4.1.4"
   },
-  "dependencies": {
-
-  },
+  "dependencies": {},
   "browserslist": [
     "iOS >= 8",
     "android >= 4.4",
