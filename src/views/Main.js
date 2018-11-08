@@ -110,11 +110,7 @@ export default arr => {
   
   function draw(positionObjArr, wordStr) {
     const letterMap = letterMapOfPositionObjArr(positionObjArr)
-    if (!wordStr) return {
-      positionObjArr,
-      letterMap,
-      matrixObj: letterMapToMatrix(letterMap)
-    }
+    if (!wordStr) return output(positionObjArr)
     const nextObjArr = findPosition({
       wordStr,
       letterMap: letterMap
@@ -134,5 +130,29 @@ export default arr => {
       sortedArr.push(theWordStr)
       return false
     } else return false
+  }
+
+  function output(positionObjArr) {
+    let translateX = 0
+    let translateY = 0
+    positionObjArr.forEach(positionObj => {
+      const currentX = positionObj.xNum
+      const currentY = positionObj.yNum
+      console.log(currentX, currentY)
+      if (currentX < translateX) translateX = currentX
+      if (currentY < translateY) translateY = currentY
+    })
+    const newPositionObjArr = positionObjArr.map(positionObj => {
+      const rtn = positionObj
+      rtn.xNum -= translateX
+      rtn.yNum -= translateY
+      return rtn
+    })
+    const letterMap = letterMapOfPositionObjArr(newPositionObjArr)
+    return {
+      positionObjArr: newPositionObjArr,
+      letterMap,
+      matrixObj: letterMapToMatrix(letterMap)
+    }
   }
 }
