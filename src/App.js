@@ -5,16 +5,16 @@ import { g } from 'gelerator'
 const rtn = gen(document.querySelector('textarea').value.trim().split('\n'))
 console.log(rtn)
 
-putOnScreen(rtn.matrixObj)
+putOnScreen(rtn.ownerMap)
 
-function putOnScreen(matrixObj) {
-  Object.keys(matrixObj).forEach(y => {
-    Object.keys(matrixObj[y]).forEach(x => {
+function putOnScreen(ownerMap) {
+  ownerMap.forEach((line, y) => {
+    line.forEach((obj, x) => {
       document.body.appendChild(
         g({
           style: `transform:translate(${x}em,${y}em)`,
           class: 'letter'
-        })(matrixObj[y][x])
+        })(obj.letter)
       )
     })
   })

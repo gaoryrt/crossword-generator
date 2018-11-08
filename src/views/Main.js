@@ -3,9 +3,9 @@ export default arr => {
   return draw([{ wordStr: sortedArr.pop(), xNum: 0, yNum: 0, isHorizon: true }], sortedArr.pop())
 
   function sortArr(arr) {
-    return arr.sort((pre, nex) => pre.length - nex.length)
+    return [...arr].sort((pre, nex) => pre.length - nex.length)
   }
-  
+
   function shuffleArr(arr) {
     for (let i = arr.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1))
@@ -15,12 +15,12 @@ export default arr => {
     }
     return arr
   }
-  
+
   // positionObjArr:
   // {
-  //   wordStr: 'prototype', 
-  //   xNum: 0, 
-  //   yNum: 0, 
+  //   wordStr: 'prototype',
+  //   xNum: 0,
+  //   yNum: 0,
   //   isHorizon: true
   // }
   function letterMapOfPositionObjArr(positionObjArr) {
@@ -37,7 +37,7 @@ export default arr => {
     })
     return rtn
   }
-  
+
   // letterMap:
   // {
   //   x: [{x: -1, y: -1}],
@@ -56,7 +56,7 @@ export default arr => {
         const xNum = xyObj.x
         const yNum = xyObj.y
         const isHorizon = matrixObj[yNum][xNum + 1] === undefined
-  
+
         if (isHorizon) {
           // 横的话，左一不该有东西
           if (matrixObj[yNum][xNum - i - 1] !== undefined) return
@@ -77,7 +77,7 @@ export default arr => {
             if (matrixObj[yNum - i + j][xNum + 1] !== undefined) return
           }
         }
-  
+
         available.push({
           wordStr,
           xNum: xyObj.x - (isHorizon ? i : 0),
@@ -88,8 +88,8 @@ export default arr => {
     }
     return available
   }
-  
-  // matrixObj: 
+
+  // matrixObj:
   // {
   //   -1: [-1: 'x', 0: 'y'        ],
   //    0: [         0: 'y', 1: 'z'],
@@ -107,7 +107,7 @@ export default arr => {
     })
     return matrix
   }
-  
+
   function draw(positionObjArr, wordStr) {
     const letterMap = letterMapOfPositionObjArr(positionObjArr)
     if (!wordStr) return output(positionObjArr)
@@ -151,20 +151,43 @@ export default arr => {
       if (currentY < translateY) translateY = currentY
     })
 
+    const order = arr.reduce((iter, val, idx) => {
+      iter[val] = idx
+      return iter
+    }, {})
+
     const newPositionObjArr = positionObjArr.map(positionObj => {
       const rtn = positionObj
       rtn.xNum -= translateX
       rtn.yNum -= translateY
       return rtn
+    }).sort((a, b) => order[a.wordStr] - order[b.wordStr])
+
+    const height = maxY - translateY
+    const width = maxX - translateX
+
+    const ownerMap = new Array(height).fill(0).map(() => new Array(width))
+
+    newPositionObjArr.forEach((positionObj, orderIdx) => {
+      const letterArr = positionObj.wordStr.split('')
+      const isHorizon = positionObj.isHorizon
+      const startY = positionObj.yNum
+      const startX = positionObj.xNum
+      letterArr.forEach((letter, letterIdx) => {
+        ownerMap[startY + (isHorizon ? 0 : letterIdx)][startX + (isHorizon ? letterIdx : 0)] = {
+          letter,
+          orderIdx,
+          isHorizon,
+          letterIdx
+        }
+      })
     })
 
-    const letterMap = letterMapOfPositionObjArr(newPositionObjArr)
-
     return {
-      lengthX: maxX - translateX,
-      lengthY: maxY - translateY,
+      height,
+      width,
       positionObjArr: newPositionObjArr,
-      matrixObj: letterMapToMatrix(letterMap)
+      ownerMap
     }
   }
 }
