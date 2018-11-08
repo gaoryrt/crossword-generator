@@ -135,23 +135,35 @@ export default arr => {
   function output(positionObjArr) {
     let translateX = 0
     let translateY = 0
+    let maxX = 0
+    let maxY = 0
+
     positionObjArr.forEach(positionObj => {
+      const wordLen = positionObj.wordStr.length
+      const isHorizon = positionObj.isHorizon
       const currentX = positionObj.xNum
       const currentY = positionObj.yNum
-      console.log(currentX, currentY)
+      const tailX = currentX + wordLen * (isHorizon ? 1 : 0)
+      const tailY = currentY + wordLen * (isHorizon ? 0 : 1)
+      if (tailX > maxX) maxX = tailX
+      if (tailY > maxY) maxY = tailY
       if (currentX < translateX) translateX = currentX
       if (currentY < translateY) translateY = currentY
     })
+
     const newPositionObjArr = positionObjArr.map(positionObj => {
       const rtn = positionObj
       rtn.xNum -= translateX
       rtn.yNum -= translateY
       return rtn
     })
+
     const letterMap = letterMapOfPositionObjArr(newPositionObjArr)
+
     return {
+      lengthX: maxX - translateX,
+      lengthY: maxY - translateY,
       positionObjArr: newPositionObjArr,
-      letterMap,
       matrixObj: letterMapToMatrix(letterMap)
     }
   }
