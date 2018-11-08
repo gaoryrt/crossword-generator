@@ -3,29 +3,22 @@
 
 [![NPM](https://nodei.co/npm/cwg.png?compact=true)](https://nodei.co/npm/cwg/)
 
-## install
-```sh
-yarn add cwg
-```
-
 ## use
 > `yarn dev`
 ```js
 import CWG from 'cwg'
+
 const words = [
   'do',
   'not'
 ]
 
-const result = CWG(words)
-console.log(result)
+const result = CWG(words) // then you can draw the crossword by this result
 ```
 
-## parameters
+## result parameters
 ```js
 // console.log(result)
-//   * d *
-//   n o t
 {
   height: 2,            // height of the matrix
   width: 3,             // width of the matrix
@@ -45,17 +38,17 @@ console.log(result)
   ],
   ownerMap: [           // matrix of the crossword
     [
-      empty,
-      {
+      empty,            // [0, 0]
+      {                 // [0, 1]
         letter: 'd',    // letter of this position
         vertical: 0     // which word this letter belongs to. in this case, it's 0th: 'do'
       },
-      empty
+      empty             // [0, 2]
     ],
     [
-      { letter: "n", horizontal: 1 },
-      { letter: "o", vertical: 0, horizontal: 1 }, // this letter belongs to both words
-      { letter: "t", horizontal: 1 }
+      { letter: "n", horizontal: 1 },              // [1, 0]
+      { letter: "o", vertical: 0, horizontal: 1 }, // letter of [1, 1] belongs to both words
+      { letter: "t", horizontal: 1 }               // [1, 2]
     ]
   ]
 }
@@ -63,5 +56,5 @@ console.log(result)
 
 
 ## todo
-[ ] handle no-result words
-[ ] do not sort the input array at the beginning
+- [ ] handle no-result words
+- [ ] do not sort the input array at the beginning
