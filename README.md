@@ -3,6 +3,8 @@
 
 [![NPM](https://nodei.co/npm/cwg.png?compact=true)](https://nodei.co/npm/cwg/)
 
+![cmd+r](./cmd+r.gif)
+
 ## use
 > `yarn dev`
 ```js

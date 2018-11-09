@@ -43,6 +43,8 @@ result.ownerMap.forEach((line, y) => {
       'data-x': x,
       'data-y': y,
       maxlength: 1,
+      autocomplete: 'off',
+      placeholder: obj.letter,
       style: `left:${30*x}px;top:${30*y}px`
     }, 'input')())
   })
@@ -53,7 +55,7 @@ ctnr.addEventListener('focus', e => {
   const el = e.target
   const h = el.dataset.h
   const v = el.dataset.v
-  hint.innerHTML = (h ? '横：' + answers[h] : '') + (v ? '<br>纵：' + answers[v] : '<br>')
+  hint.innerHTML = (h ? 'horizontal：' + answers[h] : '') + (v ? '<br>vertical：' + answers[v] : '<br>')
 }, true)
 
 ctnr.addEventListener('input', e => {
