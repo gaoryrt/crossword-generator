@@ -1,0 +1,58 @@
+html {
+  width: 100%;
+  overflow-x: hidden;
+  font-family: AvenirNext, Avenir, -apple-system, BlinkMacSystemFont, "PingFang SC","Helvetica Neue",STHeiti,"Microsoft Yahei",Tahoma,Simsun,sans-serif;
+  font-weight: normal;
+  font-style: normal;
+  font-stretch: normal;
+  user-select: none;
+  -webkit-font-smoothing: antialiased;
+  vertical-align: baseline;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-tap-highlight-color: transparent;
+  text-rendering: optimizeLegibility;
+  text-size-adjust: 100%;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  border-radius: 0;
+}
+
+input {
+  display: block;
+  position: absolute;
+  font-size: 20px;
+  line-height: 20px;
+  height: 34px;
+  width: 34px;
+  text-align: center;
+  text-transform: uppercase;
+  font-weight: 900;
+  border: 4px solid #000;
+  background: #F8F6E9;
+  box-shadow: inset 4px 4px 0 rgba(0,0,0,.1),
+              inset -4px -4px 0 rgba(255,255,255,.9),
+              4px 4px 0 #225CBD;
+}
+
+input:focus {
+  z-index: 2;
+  outline: 0 0 4px #fff;
+  border-color: #91B9FF;
+}
+
+.ctnr {
+  position: relative;
+  box-sizing: content-box;
+  padding: 10px;
+  background: #2f77e2;
+  border: 20px solid #2f77e2
+}
+
+.hint {
+  padding: 20px;
+  font-size: 20px;
+}
