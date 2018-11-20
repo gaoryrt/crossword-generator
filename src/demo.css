@@ -21,6 +21,10 @@ html {
   border-radius: 0;
 }
 
+textarea {
+  line-height: 1.7
+}
+
 input {
   display: block;
   position: absolute;
@@ -44,7 +48,7 @@ input:focus {
   border-color: #91B9FF;
 }
 
-.ctnr {
+#ctnr {
   position: relative;
   box-sizing: content-box;
   padding: 10px;

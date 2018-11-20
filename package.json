@@ -30,7 +30,6 @@
     "express": "^4.16.3",
     "file-loader": "^2.0.0",
     "friendly-errors-webpack-plugin": "^1.7.0",
-    "gelerator": "^1.1.54",
     "get-port": "^4.0.0",
     "html-webpack-plugin": "^3.2.0",
     "mini-css-extract-plugin": "^0.4.2",
@@ -45,7 +44,9 @@
     "webpack-hot-middleware": "^2.24.0",
     "webpack-merge": "^4.1.4"
   },
-  "dependencies": {},
+  "dependencies": {
+    "gelerator": "^2.0.2"
+  },
   "browserslist": [
     "iOS >= 8",
     "android >= 4.4",

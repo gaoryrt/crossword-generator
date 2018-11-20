@@ -177,13 +177,11 @@ export default arr => {
         const x = startX + (isHorizon ? letterIdx : 0)
         const y = startY + (isHorizon ? 0 : letterIdx)
         const obj = {letter}
-        const key = isHorizon ? 'horizontal' : 'vertical'
-        if (ownerMap[y][x]) {
-          ownerMap[y][x][key] = orderIdx
-        } else {
-          obj[key] = orderIdx
-          ownerMap[y][x] = obj
-        }
+        const key = isHorizon ? 'h' : 'v'
+        const target = ownerMap[y][x] || obj
+        target[key] = orderIdx
+        target[key + 'Idx'] = letterIdx
+        if (!ownerMap[y][x]) ownerMap[y][x] = obj
       })
     })
 

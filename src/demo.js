@@ -5,73 +5,88 @@ import './demo.css'
 
 const $ = s => document.getElementById(s)
 
-const words = [
-  'shout-out',
-  'enormous',
-  'mail',
-  'domestic',
-  'postbox',
-  'spicy'
-]
+const gen = () => {
+  const words = $('key').value.split('\n').map(i => i.trim())
+  const answers = $('val').value.split('\n').map(i => i.trim())
 
-const answers = [
-  '大声说出',
-  '庞大的',
-  '邮件/邮递',
-  '国内的/家务的',
-  '邮箱',
-  '加香料的/香辣的'
-]
-
-const result = CWG(words)
-
-const ctnr = g({
-  class: 'ctnr',
-  style: `height:${30*result.height+4}px;width:${30*result.width+4}px`
-})()
-const hint = g('hint')()
-document.body.appendChild(ctnr)
-document.body.appendChild(hint)
-
-result.ownerMap.forEach((line, y) => {
-  line.forEach((obj, x) => {
-    ctnr.appendChild(g({
-      id: x + '' + y,
-      'data-letter': obj.letter,
-      'data-v': obj.vertical === undefined ? '' : obj.vertical,
-      'data-h': obj.horizontal === undefined ? '' : obj.horizontal,
-      'data-x': x,
-      'data-y': y,
-      maxlength: 1,
-      autocomplete: 'off',
-      placeholder: obj.letter,
-      style: `left:${30*x}px;top:${30*y}px`
-    }, 'input')())
-  })
-})
-
-let doinVertically = null
-ctnr.addEventListener('focus', e => {
-  const el = e.target
-  const h = el.dataset.h
-  const v = el.dataset.v
-  hint.innerHTML = (h ? 'horizontal：' + answers[h] : '') + (v ? '<br>vertical：' + answers[v] : '<br>')
-}, true)
-
-ctnr.addEventListener('input', e => {
-  const el = e.target
-  const thisId = + el.id
-  const right = $(thisId + 10)
-  const down = $((thisId > 8 ? '' : '0') + (thisId + 1))
-  if (e.data === null) return
-  if (!right && !down) {
-    doinVertically = null
-  } else if (right && right.value === '' && (!down || down.value)) {
-    doinVertically = false
-  } else if (down && down.value === '' && (!right || right.value)) {
-    doinVertically = true
+  if ($('ctnr')) {
+    document.body.removeChild($('ctnr'))
+    document.body.removeChild($('hint'))
   }
-  if (doinVertically === null) return el.blur()
-  if (doinVertically) down.focus()
-  else right.focus()
-})
+  const result = CWG(words)
+
+  const ctnr = g({
+    id: 'ctnr',
+    style: {
+      height: 30 * result.height + 4,
+      width: 30 * result.width + 4
+    }
+  })()
+  const hint = g({id: 'hint'})()
+  document.body.appendChild(ctnr)
+  document.body.appendChild(hint)
+
+  let count = 0
+  result.ownerMap.forEach((line, y) => {
+    line.forEach((obj, x) => {
+      ctnr.appendChild(g({
+        id: x + '' + y,
+        dataletter: obj.letter,
+        datav: obj.v,
+        datah: obj.h,
+        datax: x,
+        datay: y,
+        datavidx: obj.vIdx,
+        datahidx: obj.hIdx,
+        maxlength: 1,
+        autocomplete: 'disabled',
+        style: {
+          left: 30 * x,
+          top: 30 * y
+        }
+      }, 'input')())
+      count += 1
+    })
+  })
+
+  let doinVertically = null
+  ctnr.addEventListener('focus', e => {
+    const el = e.target
+    const h = el.dataset.h
+    const v = el.dataset.v
+    hint.innerHTML = (h ? '横：' + answers[h] : '') + (v ? '<br>纵：' + answers[v] : '<br>')
+  }, true)
+
+  ctnr.addEventListener('click', e => {
+    const el = e.target
+    if (el.nodeName !== 'INPUT') return hint.innerHTML = ''
+    const x = + el.dataset.x
+    const y = + el.dataset.y
+    if ($(`${x}${y + 1}`)) doinVertically = true
+    else if ($(`${x + 1}${y}`)) doinVertically = false
+    else doinVertically = null
+  })
+
+  ctnr.addEventListener('input', e => {
+    const el = e.target
+    const x = + el.dataset.x
+    const y = + el.dataset.y
+    if (e.data === null) {
+
+    } else {
+      if (e.data === el.dataset.letter) count -= 1
+      if (count === 0) setTimeout(() => alert('YOU WIN!'), 4)
+      const findNextEl = (x, y, v) => {
+        const rtnEl = $(`${x + !v}${y + v}`)
+        if (!rtnEl) return el.blur()
+        if (rtnEl.value) return findNextEl(x + !v, y + v, v)
+        return rtnEl
+      }
+      const nextEl = findNextEl(x, y, doinVertically)
+      if (nextEl) nextEl.focus()
+    }
+  })
+
+}
+
+$('gen').onclick = gen
