@@ -4,6 +4,7 @@
   "sideEffects": [
     "*.css"
   ],
+  "main": "dist/crossword-generator.min.js",
   "description": "crossword generator",
   "author": "gaoryrt",
   "license": "MIT",
