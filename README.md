@@ -1,5 +1,5 @@
 # CWG
-> crossword-generator
+> [crossword-generator](http://gaoryrt.com/crossword-generator/)
 
 [![NPM](https://nodei.co/npm/cwg.png?compact=true)](https://nodei.co/npm/cwg/)
 
