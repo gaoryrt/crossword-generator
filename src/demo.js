@@ -71,20 +71,16 @@ const gen = () => {
     const el = e.target
     const x = + el.dataset.x
     const y = + el.dataset.y
-    if (e.data === null) {
-
-    } else {
-      if (e.data === el.dataset.letter) count -= 1
-      if (count === 0) setTimeout(() => alert('YOU WIN!'), 4)
-      const findNextEl = (x, y, v) => {
-        const rtnEl = $(`${x + !v}${y + v}`)
-        if (!rtnEl) return el.blur()
-        if (rtnEl.value) return findNextEl(x + !v, y + v, v)
-        return rtnEl
-      }
-      const nextEl = findNextEl(x, y, doinVertically)
-      if (nextEl) nextEl.focus()
+    if (e.data === el.dataset.letter) count -= 1
+    if (count === 0) setTimeout(() => alert('YOU WIN!'), 4)
+    const findNextEl = (x, y, v) => {
+      const rtnEl = $(`${x + !v}${y + v}`)
+      if (!rtnEl) return el.blur()
+      if (rtnEl.value) return findNextEl(x + !v, y + v, v)
+      return rtnEl
     }
+    const nextEl = findNextEl(x, y, doinVertically)
+    if (nextEl) nextEl.focus()
   })
 
 }
