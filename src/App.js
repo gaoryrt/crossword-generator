@@ -1,4 +1,6 @@
 export default arr => {
+  // increase the probability of having an answer
+  // const sortedArr = arr
   const sortedArr = sortArr(arr)
   return draw([{ wordStr: sortedArr.pop(), xNum: 0, yNum: 0, isHorizon: true }], sortedArr.pop())
 
@@ -58,7 +60,7 @@ export default arr => {
         const isHorizon = matrixObj[yNum][xNum + 1] === undefined
 
         if (isHorizon) {
-          // 横的话，左一不该有东西
+          // o[y][x - 1] must have no letter if o[y][x] is horizon
           if (matrixObj[yNum][xNum - i - 1] !== undefined) return
           if (matrixObj[yNum][xNum - i + len] !== undefined) return
           for (let j = 0; j < len; j += 1) {
