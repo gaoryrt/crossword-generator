@@ -1,6 +1,6 @@
 // import CWG from '../dist/crossword-generator.min'
-import CWG from './App'
 import { g } from 'gelerator'
+import CWG from './App'
 import './demo.css'
 
 const $ = s => document.getElementById(s)
@@ -54,7 +54,7 @@ const gen = () => {
     const el = e.target
     const h = el.dataset.h
     const v = el.dataset.v
-    hint.innerHTML = (h ? '横：' + answers[h] : '') + (v ? '<br>纵：' + answers[v] : '<br>')
+    hint.innerHTML = (h ? 'horizion：' + answers[h] : '') + (v ? '<br>vertical：' + answers[v] : '<br>')
   }, true)
 
   ctnr.addEventListener('click', e => {
